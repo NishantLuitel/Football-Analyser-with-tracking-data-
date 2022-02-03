@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+ # -*- coding: utf-8 -*-
 """
 Created on Sun Jan 30 19:56:46 2022
 
@@ -79,7 +79,7 @@ class dataFrame:
             if self.shape[0] == 1 and len(idxes)==1:
                 return self.__rows[1][idxes[0]]
             else: 
-                for i in range(self.shape[0]):
+                for i in range(self.shape[0]+1):
                     column = []
                     for idx in idxes:
                         column.append(self.__rows[i][idx])
@@ -99,12 +99,86 @@ class dataFrame:
         else:
             assert False, "Invalid argument type"
             
+        
+            
+    def __setitem__(self,column_name,item):
+        '''Implementing the bracket notation for changing elements'''
+        
+
+        
+        if type(column_name) == str:
+            assert column_name in self.columns , "Column name is incorrect"
+            idxes = []
+            for i in range(len(self.columns)):
+                if column_name == self.columns[i]:
+                    idxes.append(i)            
+
+            if type(item) == list and type(item[0]) == list:
+                assert self.shape == (len(item),len(item[0])), "Argument shape mismatched"
+                for i in range(self.shape[0]):
+                    for n,idx in enumerate(idxes):
+                        self.__rows[i+1][idx] = item[i][n]
+                
+            elif type(item) == type(dataFrame([[''],['']])):
+                assert self.shape == item.shape, "Argument shape mismatched"
+                for i in range(self.shape[0]):
+                    for n,idx in enumerate(idxes):
+                        self.__rows[i][idx] = item.__rows[i][n]
+                
+            elif len(idxes)==1 and type(item) == list:
+                item_lists = []
+                for el in item:
+                    item_lists.append([el])
+                assert self.shape[0] == len(item_lists) , "Item should either be a list or 2d-list"
+                for i in range(self.shape[0]):
+                    for idx in idxes:
+                        self.__rows[i+1][idx] = item_lists[i][0]                                
+            
+            elif type(item) != list:
+                assert self.shape[0] == 1 and self.shape[1] == 1, "Assignment cannnot be made"
+                self.__rows[1][0] = item
+                
+                
+        
+        elif type(column_name) == int:
+            assert column_name>=0 and column_name<=self.num_rows-1 , "Index not in the range"
+
+            if type(item) == list and type(item[0]) == list:
+                assert self.shape == (len(item),len(item[0])), "Argument shape mismatched"
+                self.__rows[column_name+1] = item[column_name]
+                
+            elif type(item) == type(dataFrame([[''],['']])):
+                assert self.shape == item.shape, "Argument shape mismatched"
+                if self.columns == item.columns:
+                    self.__rows[column_name+1] = item.__rows[column_name+1]
+                
+            elif self.shape[1] == 1 and type(item) == list:
+                item_lists = []
+                for el in item:
+                    item_lists.append(list(el))
+                assert self.shape[0] == len(item_lists) , "Item should either be a list or 2d-list"
+                self.__getitem__(column_name).__rows[1:] = item_lists
+                
+            elif type(item) == list:
+                assert self.shape[1] == len(item) ,"Item should be a list"
+                self.__rows[column_name+1] = item
+                
+            
+            elif type(item) != list:
+                assert self.shape[0] == 1 and self.shape[1] == 1, "Assignment cannnot be made"
+                self.__rows[1][0] = item
+
+        else:
+            assert False, "Invalid argument type"
+        
+
+        
             
             
         
         
-    def __setitem__(self,column_name):
-        pass
+    #def __setitem__(self,column_name):
+    #    pass
     
         
         

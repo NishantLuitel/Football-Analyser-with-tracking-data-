@@ -38,11 +38,27 @@ file = 'data/prac1.csv'
 #print(x.columns)
 
 m = data_structure.dataFrame(file)
-print(m['a'])
-print(m['a'][1])
-print(m[1])
-print(m[1]['a'])
-m['a'] = [7,8]
+#print(m['a'])
+#print(m['a'][1])
+#print(m[1])
+#print(m[1]['a'])
+#m['a'] = [7,8]
+#print(m)
+#m[1] = [0,3,0]
+#print(m)
+#m['a'][1] = 2
+#print(m)
+
+#print(m['a'])
+#print(m['a', 1])
+#m['a'][1] = 7
+#m[0]['b'] = 7
 print(m)
-m[1] = [0,3,0]
+
+x = m[1]
+print(x)
+x[0]['a'] = 4
 print(m)
+
+
+

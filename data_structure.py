@@ -11,7 +11,7 @@ import os.path
 class dataFrame:
     
     
-    def __init__(self,filename= None):
+    def __init__(self,filename= None,skiprows = 0):
         
         self.__reader = None
         self.__rows = []
@@ -22,6 +22,7 @@ class dataFrame:
                 self.__reader = csv.reader(open(filename))
                 for row in self.__reader:
                     self.__rows.append(row)
+                    #self.__rows = self.__rows[skiprows:]
                 print("File read as custom dataFrame:",filename)
         else:
             self.__rows = filename
@@ -211,6 +212,7 @@ class dataFrame:
                 
         else:
             assert False, "Invalid argument type"
+            
     
         
         

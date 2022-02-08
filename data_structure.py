@@ -11,21 +11,33 @@ import os.path
 class dataFrame:
     
     
-    def __init__(self,filename= None,skiprows = 0):
+    def __init__(self,filename,skiprows = 0):
         
         self.__reader = None
         self.__rows = []
         
+        
+
+            
         if type(filename) == str: 
-            if os.path.isfile(filename):
-                print("Reading...")
-                self.__reader = csv.reader(open(filename))
-                for row in self.__reader:
-                    self.__rows.append(row)
-                    #self.__rows = self.__rows[skiprows:]
-                print("File read as custom dataFrame:",filename)
-        else:
+            assert os.path.isfile(filename) == True, "File not found"
+            print("Reading...")
+            self.__reader = csv.reader(open(filename))
+            for row in self.__reader:
+                self.__rows.append(row)
+                #self.__rows = self.__rows[skiprows:]
+            print("File read as custom dataFrame:",filename)
+                
+        elif type(filename) == list and type(filename[0]) == list:
             self.__rows = filename
+            
+        elif type(filename)==type(dataFrame([[''],['']])):
+            column_names = filename.columns
+            self.__rows = filename.__rows[skiprows+1:]
+            self.__rows.insert(0,column_names)
+            
+  
+        
             
 
         
@@ -213,8 +225,24 @@ class dataFrame:
         else:
             assert False, "Invalid argument type"
             
+            
     
-        
+    def change_columnName(self,name):
+        if isinstance(name,list):
+            assert self.num_columns == len(name) , "Number of columns mismatched"
+            self.__rows[0] = name
+        else:
+            assert False, "Argument for column should be given as a list"
+    
+    @property
+    def aslist(self):
+        '''Returns python-list rather than dataFrame'''
+        if self.shape[0] == 1:
+            return self.__rows[1]
+        elif self.shape[1] == 1:
+            return [x[0] for x in self.__rows[1:]]
+        else:
+            return self.__rows[1:]
         
     @property    
     def columns(self):

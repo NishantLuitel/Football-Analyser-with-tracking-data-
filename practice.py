@@ -37,7 +37,7 @@ file = 'data/prac1.csv'
 #data_structure.dataFrame.save_as_csv(z,filename = 'data/prac1.csv')
 #print(x.columns)
 
-m = data_structure.dataFrame(file)
+m = data_structure.dataFrame(filename_home_track)
 #print(m['a'])
 #print(m['a'][1])
 #print(m[1])
@@ -53,11 +53,11 @@ m = data_structure.dataFrame(file)
 #print(m['a', 1])
 #m['a'][1] = 7
 #m[0]['b'] = 7
-print(m)
+#print(m)
 
-x = m[1]
-print(x)
-x[0]['a'] = 4
+#x = m[1]
+#print(x)
+#x[0]['a'] = 4
 print(m)
 
 

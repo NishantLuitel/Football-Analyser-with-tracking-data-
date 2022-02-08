@@ -6,6 +6,7 @@ Created on Sun Jan 30 19:56:46 2022
 """
 import csv
 import os.path
+from collections import OrderedDict
 
 
 class dataFrame:
@@ -16,9 +17,6 @@ class dataFrame:
         self.__reader = None
         self.__rows = []
         
-        
-
-            
         if type(filename) == str: 
             assert os.path.isfile(filename) == True, "File not found"
             print("Reading...")
@@ -36,16 +34,12 @@ class dataFrame:
             self.__rows = filename.__rows[skiprows+1:]
             self.__rows.insert(0,column_names)
             
-  
-        
             
-
-        
     def __str__(self):
         
         max_index = len(super.__str__(self.shape[0]))
-        InRange_row = min(4,self.num_rows)
-        InRange_column = min(3,self.num_columns)
+        InRange_row = min(5,self.num_rows)
+        InRange_column = min(5,self.num_columns)
         
         
         #column header string
@@ -75,17 +69,7 @@ class dataFrame:
     def __repr__(self):
         return self.__str__()
     
-    def __find_columns(self,column_name):
-        assert column_name in self.columns , "Invalid Column name"
-        idxes = []
-        for i in range(len(self.columns)):
-            if column_name == self.columns[i]:
-                idxes.append(i)
-        return idxes
-        
-    
-        
-    
+
     def __getitem__(self,column_name):
         '''Implementing the bracket notation for accessing elements'''
         
@@ -140,7 +124,6 @@ class dataFrame:
             assert False, "Invalid argument type"
             
         
-            
     def __setitem__(self,column_name,item):
         '''Implementing the bracket notation for changing elements'''
         
@@ -226,14 +209,43 @@ class dataFrame:
             assert False, "Invalid argument type"
             
             
+    def __find_columns(self,column_name):
+        assert column_name in self.columns , "Invalid Column name"
+        idxes = []
+        for i in range(len(self.columns)):
+            if column_name == self.columns[i]:
+                idxes.append(i)
+        return idxes
     
+    
+    def __display_dict(self,dic):
+        max_length = len(max(list(dic.keys()),key = len))
+        for elem in dic:
+            print('{0:>{1}} : {2}'.format(elem,max_length,dic[elem]))
+                               
+        
     def change_columnName(self,name):
         if isinstance(name,list):
             assert self.num_columns == len(name) , "Number of columns mismatched"
             self.__rows[0] = name
         else:
             assert False, "Argument for column should be given as a list"
-    
+                      
+            
+    def value_counts(self):
+        assert self.shape[1] == 1,"Cannot call value_counts on more than one column"
+        column_items = self.aslist
+        
+        item2counts = {}
+        for column in column_items:
+            if str(column) in item2counts:
+                item2counts[str(column)]+=1
+            else:
+                item2counts[str(column)] = 1
+        item2counts_ordered = OrderedDict(sorted(item2counts.items(), key = lambda x:-x[1]))
+        self.__display_dict(item2counts_ordered)
+        
+
     @property
     def aslist(self):
         '''Returns python-list rather than dataFrame'''

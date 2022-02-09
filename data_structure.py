@@ -73,8 +73,6 @@ class dataFrame:
     def __getitem__(self,column_name):
         '''Implementing the bracket notation for accessing elements'''
         
-        print('/nget method called/n')
-        
         if type(column_name) == str:
          
             idxes = self.__find_columns(column_name)
@@ -102,6 +100,17 @@ class dataFrame:
                 rows.append(self.__rows[column_name+1])
                 return dataFrame(rows)
             
+        elif type(column_name)==list:
+            '''returns dataframe from given list of indices'''
+            rows = []
+            rows.append(self.columns)
+            for column in column_name:
+                if type(column) == int:
+                    assert column>=0 and column<=self.num_rows-1 , "Index not in the range"
+                    rows.append(self.__rows[column+1])
+            return dataFrame(rows)  
+                
+            
         elif type(column_name) == tuple:
            column_name0 , column_name1 = column_name
 
@@ -126,9 +135,7 @@ class dataFrame:
         
     def __setitem__(self,column_name,item):
         '''Implementing the bracket notation for changing elements'''
-        
-
-        
+               
         if type(column_name) == str:
 
             idxes = self.__find_columns(column_name)
@@ -208,6 +215,20 @@ class dataFrame:
         else:
             assert False, "Invalid argument type"
             
+    def __eq__(self,item):
+        if type(item)==type(dataFrame([[''],['']])):
+            if self.shape == item.shape:
+                return self.__rows == item.__rows
+            else:
+                return False
+        else:
+            assert self.shape[1] == 1 , "Cannot call value_counts on more than one column"
+            indexes = [i for i,element in enumerate(self.aslist) if element == item]
+            if len(indexes) == 0:
+                return False
+            else:
+                return indexes
+            
             
     def __find_columns(self,column_name):
         assert column_name in self.columns , "Invalid Column name"
@@ -221,8 +242,8 @@ class dataFrame:
     def __display_dict(self,dic):
         max_length = len(max(list(dic.keys()),key = len))
         for elem in dic:
-            print('{0:>{1}} : {2}'.format(elem,max_length,dic[elem]))
-                               
+            print('{0:<{1}} : {2}'.format(elem,max_length,dic[elem]))
+        print('\n')                      
         
     def change_columnName(self,name):
         if isinstance(name,list):
@@ -238,6 +259,8 @@ class dataFrame:
         
         item2counts = {}
         for column in column_items:
+            if column == '' or column == 'NaN':
+                continue
             if str(column) in item2counts:
                 item2counts[str(column)]+=1
             else:

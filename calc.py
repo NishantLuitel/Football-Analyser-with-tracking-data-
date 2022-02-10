@@ -38,7 +38,7 @@ def Sub_eventsCount(events,jersey_no,Type):
     given jersey number in the given events data structure'''
     
     string = 'Player'+str(jersey_no)
-    eventType_index = events[events['From'] == string]['Type'] == Type.upper()
+    eventType_index = events[events['From'] == string]['Subtype'] == Type.upper()
     if eventType_index != False:
         return len(eventType_index)
     else:
@@ -73,8 +73,15 @@ def passes_attempted(events,jersey_no):
             balls_lostByClearance - balls_lostByHeadClearance -balls_lostByWoodwork)
 
 def interceptions(events,jersey_no):
-    '''Calculates the number of interceptions '''
+    '''Calulates the number of interceptions made by player with 
+    given jersey number in the given events data structure'''
+    recovery_events = events[events['Type'] == 'RECOVERY']
+    return Sub_eventsCount(recovery_events,jersey_no,'Interception')
 
     
-   
+def recoveries(events,jersey_no):
+    '''Calulates the number of recoveries made by player with 
+    given jersey number in the given events data structure'''
+    
+    return eventsCount(events,jersey_no,'Recovery')
     

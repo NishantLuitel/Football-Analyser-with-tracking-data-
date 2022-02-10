@@ -9,16 +9,7 @@ Created on Sun Feb  6 19:59:07 2022
 #This module consists of all the calculations required for the project
 
 
-def shots(events,jersey_no):
-    '''Calulates the number of shots taken by player with 
-    given jersey number in the given events data structure'''
-    
-    string = 'Player'+str(jersey_no)
-    shts_index = events[events['From'] == string]['Type'] == 'SHOT'
-    if shts_index != False:
-        return len(shts_index)
-    else:
-        return 0
+
 
     
 def eventsCount(events,jersey_no,Type):
@@ -44,17 +35,20 @@ def Sub_eventsCount(events,jersey_no,Type):
     else:
         return 0
  
+def shots(events,jersey_no):
+    '''Calulates the number of shots taken by player with 
+    given jersey number in the given events data structure'''
+    
+    return eventsCount(events,jersey_no,Type = 'Shots')
+    
+
     
 def passes_completed(events,jersey_no):
     '''Calulates the number of passes completed by player with 
     given jersey number in the given events data structure'''
     
-    string = 'Player'+str(jersey_no)
-    passes_index = events[events['From'] == string]['Type'] == 'PASS'
-    if passes_index != False:
-        return len(passes_index)
-    else:
-        return 0
+    return eventsCount(events,jersey_no,Type = 'Pass')
+    
     
     
 def passes_attempted(events,jersey_no):
@@ -72,9 +66,11 @@ def passes_attempted(events,jersey_no):
     return (completed_passes + balls_lost - balls_lostByTheft - 
             balls_lostByClearance - balls_lostByHeadClearance -balls_lostByWoodwork)
 
+
 def interceptions(events,jersey_no):
     '''Calulates the number of interceptions made by player with 
     given jersey number in the given events data structure'''
+    
     recovery_events = events[events['Type'] == 'RECOVERY']
     return Sub_eventsCount(recovery_events,jersey_no,'Interception')
 
@@ -84,4 +80,5 @@ def recoveries(events,jersey_no):
     given jersey number in the given events data structure'''
     
     return eventsCount(events,jersey_no,'Recovery')
-    
+
+

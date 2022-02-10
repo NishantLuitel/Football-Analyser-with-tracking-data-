@@ -39,14 +39,14 @@ events_home['From'].value_counts()
 
 
 
-jersey_no = 17
-#print('\nThe number of shots made by player',jersey_no,'is',shots(events_home,jersey_no))
-#print('The number of passes completed by player',jersey_no,'is',passes_completed(events_home,jersey_no))
-#print('The number of passes_attempted by player',jersey_no,'is',passes_attempted(events_home,jersey_no))
-#print('Pass accuracy by player',jersey_no,'is',passes_completed(events_home,jersey_no)/
- #     passes_attempted(events_home,jersey_no))
-events_home[events_home['Type'] == 'RECOVERY']['From'].value_counts()
-print('\nRecovery made by player',jersey_no,interceptions(events_home,jersey_no))
+jersey_no = 11
+print('\nThe number of shots made by player',jersey_no,'is',shots(events_home,jersey_no))
+print('The number of passes completed by player',jersey_no,'is',passes_completed(events_home,jersey_no))
+print('The number of passes attempted by player',jersey_no,'is',passes_attempted(events_home,jersey_no))
+print('Pass accuracy by player',jersey_no,'is',passes_completed(events_home,jersey_no)/
+      passes_attempted(events_home,jersey_no))
+#events_home[events_home['Type'] == 'RECOVERY']['From'].value_counts()
+#print('\nRecovery made by player',jersey_no,interceptions(events_home,jersey_no))
 
 
 

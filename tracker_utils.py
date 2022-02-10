@@ -58,10 +58,10 @@ def get_player_jersey_from_tracking(tracking_data_dF):
     return jerseys
     
     
-
+def get_goal_keeper_from_tracking(tracking_data_dF):
+    '''returns the jersey number of goal keeper'''
     
-
-
+    
     
     
     

@@ -72,6 +72,9 @@ def passes_attempted(events,jersey_no):
     return (completed_passes + balls_lost - balls_lostByTheft - 
             balls_lostByClearance - balls_lostByHeadClearance -balls_lostByWoodwork)
 
+def interceptions(events,jersey_no):
+    '''Calculates the number of interceptions '''
+
     
    
     

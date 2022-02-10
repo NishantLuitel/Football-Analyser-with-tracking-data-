@@ -101,7 +101,7 @@ class dataFrame:
                 return dataFrame(rows)
             
         elif type(column_name)==list:
-            '''returns dataframe from given list of indices'''
+            #returns dataframe from given list of indices            
             rows = []
             rows.append(self.columns)
             for column in column_name:
@@ -216,14 +216,21 @@ class dataFrame:
             assert False, "Invalid argument type"
             
     def __eq__(self,item):
+        '''Implementing '==' for dataFrame '''
+        
+        # When the equality check is done with a dataFrame object
         if type(item)==type(dataFrame([[''],['']])):
             if self.shape == item.shape:
                 return self.__rows == item.__rows
             else:
                 return False
+            
+        # When the equality check is done with a item present in the column dataFrame 
         else:
-            assert self.shape[1] == 1 , "Cannot call value_counts on more than one column"
+            assert self.shape[1] == 1 , "Cannot check equality on more than one column"
             indexes = [i for i,element in enumerate(self.aslist) if element == item]
+            
+            #Returns False if no item is matched or list of index if some items are matched
             if len(indexes) == 0:
                 return False
             else:
@@ -231,6 +238,8 @@ class dataFrame:
             
             
     def __find_columns(self,column_name):
+        '''returns the list of all indexes for the given column name present in the dataFrame'''
+        
         assert column_name in self.columns , "Invalid Column name"
         idxes = []
         for i in range(len(self.columns)):

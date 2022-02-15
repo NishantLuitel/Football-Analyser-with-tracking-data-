@@ -137,10 +137,30 @@ class dataFrame:
         '''Implementing the bracket notation for changing elements'''
                
         if type(column_name) == str:
-
-            idxes = self.__find_columns(column_name)
+            
+            try:
+                idxes = self.__find_columns(column_name)
+            except AssertionError:
+                #When no column is found new column is added with the given list item
+                
+                idx = len(self.columns)
+                self.__rows[0].append(column_name)
+                assert type(item) == list, "Item must be a list of values"
+                if len(item)<=self.num_rows:
+                    item_=['']*(self.num_rows - len(item))
+                    item = item+item_
+                    for i in range(self.num_rows):                        
+                        self.__rows[i+1].append(item[i])
+                    return
+                else:
+                    rows__ = [['']*(self.num_columns)]*(len(item)-self.num_rows)
+                    self.__rows = self.__rows + rows__
+                    for i in range(self.num_rows):                        
+                        self.__rows[i+1].append(item[i])
+                    return
+                    
           
-
+            # If some column_name is matched
             if type(item) == list and type(item[0]) == list:
                 assert self.shape == (len(item),len(item[0])), "Argument shape mismatched"
                 for i in range(self.shape[0]):
@@ -236,6 +256,21 @@ class dataFrame:
             else:
                 return indexes
             
+    def __ne__(self,item):
+        '''Implementing '!=' for dataFrame '''
+        
+        
+        value = (self == item)
+        
+        if type(value) == bool:
+            return (not value)
+        elif type(value)==list:
+            indexes = [i for i in range(self.num_rows) if i not in value]
+            return indexes
+            
+        
+        
+            
             
     def __find_columns(self,column_name):
         '''returns the list of all indexes for the given column name present in the dataFrame'''
@@ -252,7 +287,40 @@ class dataFrame:
         max_length = len(max(list(dic.keys()),key = len))
         for elem in dic:
             print('{0:<{1}} : {2}'.format(elem,max_length,dic[elem]))
-        print('\n')                      
+        print('\n')        
+        
+        
+    #Bi-type
+    def __find_first_index_ofTwo(self,value):
+        '''Uses bisection search algorithm to find the index
+        
+            NOTE: Only works if type and non-type elements are present
+            where the given value is type and all others are non type
+            and type elements always occur together at last'''
+        
+        assert self.shape[1] == 1,"Cannot find index on more than one column with this method"
+        low = 0 
+        lst = self.aslist
+        high = len(lst)-1
+        idx = -1
+        
+        #Bisection implementation
+        while low <= high:
+            mid = (high+low)//2
+            
+            if self[mid] == value:
+                idx = mid
+                high = mid-1
+            
+            elif self[mid] != value:
+                low = mid+1
+                
+            
+        if idx != -1:
+            return idx
+        else:
+            assert False, "Element Not Found"
+
         
     def change_columnName(self,name):
         if isinstance(name,list):
@@ -277,6 +345,24 @@ class dataFrame:
         item2counts_ordered = OrderedDict(sorted(item2counts.items(), key = lambda x:-x[1]))
         self.__display_dict(item2counts_ordered)
         
+    def find_firstOfTwo(self, value):
+        '''Finds the first index of given value'''
+        
+        return self.__find_first_index_ofTwo(value=value)
+        
+    def find_last_validOfTwo(self):
+        '''Only 'NaN' are counted as Invalid
+            It returns -1 if no valid element is present
+            
+            NOTE: Only works if invalid item is present after all the valid items and are all together
+            '''
+        
+        return self.__find_first_index_ofTwo('NaN') - 1
+    
+    def find_lastOfTwo(self):
+        ''' ('') is considered as last element in columns'''
+        
+        return self.__find_first_index_ofTwo('') - 1
 
     @property
     def aslist(self):

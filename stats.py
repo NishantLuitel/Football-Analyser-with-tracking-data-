@@ -7,7 +7,7 @@ Created on Mon Feb  7 18:16:25 2022
 
 
 import tracker_utils
-from calc import shots,passes_completed,passes_attempted,recoveries,interceptions
+from calc import shots,passes_completed,passes_attempted,recoveries,interceptions,minutes_played
 
 dataFolder = 'data'
 gameId = 1
@@ -41,7 +41,7 @@ print(tracking_home)
 
 
 
-#jersey_no = 11
+jersey_no = 26
 #print('\nThe number of shots made by player',jersey_no,'is',shots(events_home,jersey_no))
 #print('The number of passes completed by player',jersey_no,'is',passes_completed(events_home,jersey_no))
 #print('The number of passes attempted by player',jersey_no,'is',passes_attempted(events_home,jersey_no))
@@ -49,6 +49,7 @@ print(tracking_home)
 #      passes_attempted(events_home,jersey_no))
 #events_home[events_home['Type'] == 'RECOVERY']['From'].value_counts()
 #print('\nRecovery made by player',jersey_no,interceptions(events_home,jersey_no))
+print('Minutes played by player',jersey_no,minutes_played(tracking_away,jersey_no))
 
 
 

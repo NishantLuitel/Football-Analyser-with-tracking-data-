@@ -82,5 +82,45 @@ def recoveries(events,jersey_no):
     return eventsCount(events,jersey_no,'Recovery')
 
 
+def minutes_played(tracking,jersey_no):
+    '''Calculates the minutes played by player of given jersey number'''
+    
+    __check_player_in_tracking(tracking, jersey_no)
+    player_str = str(jersey_no)+'_x'
+    
+    #Each index lasts 1/25 seconds , hence we divide by 25
+    #We also divide by 60 to get value in minutes
+    if (__check_player_in_startingEleven(tracking,jersey_no)):
+        try:
+            return round(float(tracking[player_str].find_last_validOfTwo())/25/60,2)
+        except AssertionError:
+            return round(float(len(tracking[player_str].aslist))/25/60,2)
+    else:
+        #Takes longer time to execute
+        return round(float(len(tracking[player_str] != 'NaN'))/25/60,2)
+       #elif(tracking[player_str].find_last_valid()==0)
+    
+    #Assertion error occurs if there no invalid item is present i.e. player plays full minutes
+    
 
 
+def distance_covered(tracking,jersey_no):
+    '''Calculates the distace covereed (in kilometers) by given jersey number'''
+    
+    pass
+
+def __check_player_in_tracking(tracking,jersey_no):
+    
+    player_str = str(jersey_no)+'_x'
+    assert player_str in tracking.columns , "Player " + str(jersey_no) + " not present in the team"
+    
+def __check_player_in_startingEleven(tracking,jersey_no):
+    
+    player_str = str(jersey_no)+'_x'
+    if tracking[player_str][0] == 'NaN':
+        return False
+    else:
+        return True
+    
+    
+    

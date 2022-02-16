@@ -231,7 +231,21 @@ class dataFrame:
                 assert column_name0>=0 and column_name0<=self.num_rows-1 , "Index not in the range"
                 assert column_name1>=0 and column_name1<=self.num_columns-1 , "Index not in the range"
                 self.__rows[column_name0+1][column_name1] = item
-                
+         
+        #column name is treated as index
+        elif type(column_name) == list:
+            assert self.shape[1] == 1,"Cannot call - on more than one column"
+            if type(item) == list:
+                assert len(column_name) == len(item), "length of index should match length of input list"
+                for i,j in enumerate(column_name):
+                    self.__rows[j+1] = [item[i]]
+            elif type(item) == str or type(float(item)) == float:
+                for i in column_name:
+                    self.__rows[i+1][0] = item
+            else:
+                assert False, "Item should be either be list or primitive data "
+            
+            
         else:
             assert False, "Invalid argument type"
             
@@ -255,6 +269,57 @@ class dataFrame:
                 return False
             else:
                 return indexes
+    def __gt__(self,item):
+        '''Implementing '==' for dataFrame '''
+        
+        # When the equality check is done with a dataFrame object
+        #if type(item)==type(dataFrame([[''],['']])):
+        #    if self.shape == item.shape:
+        #        return self.__rows == item.__rows
+        #    else:
+        #        return False
+            
+        # When the equality check is done with a item present in the column dataFrame
+        if False:
+            pass
+        else:
+            assert self.shape[1] == 1 , "Cannot check equality on more than one column"
+            indexes = [i for i,element in enumerate(self.aslist) if float(element) > float(item)]
+            
+            #Returns False if no item is matched or list of index if some items are matched
+            if len(indexes) == 0:
+                return False
+            else:
+                return indexes
+            
+            
+    def __lt__(self,item):
+        '''Implementing '==' for dataFrame '''
+        
+        # When the equality check is done with a dataFrame object
+        #if type(item)==type(dataFrame([[''],['']])):
+        #    if self.shape == item.shape:
+        #        return self.__rows == item.__rows
+        #    else:
+        #        return False
+            
+        # When the equality check is done with a item present in the column dataFrame 
+        
+
+        if False:
+            pass
+        else:            
+            if self.__isfloat(item):
+                assert self.shape[1] == 1 , "Cannot check less than on more than one column"
+                indexes = [i for i,element in enumerate(self.aslist) if float(element) < float(item)]
+                
+                #Returns False if no item is matched or list of index if some items are matched
+                if len(indexes) == 0:
+                    return False
+                else:
+                    return indexes
+            else:
+                assert False, "item should be convertible datatype or a dataFrame of same shape "
             
     def __ne__(self,item):
         '''Implementing '!=' for dataFrame '''
@@ -268,8 +333,110 @@ class dataFrame:
             indexes = [i for i in range(self.num_rows) if i not in value]
             return indexes
             
+    def __truediv__(self, item):
+        '''Implementing '/' operator for dataFrame'''
         
+        assert self.shape[1] == 1,"Cannot call / on more than one column"
+        truediv_array = [['']]*self.num_rows
         
+        #Simple broadcasting
+        if  self.__isfloat(item):
+            for i in range(self.num_rows):
+                truediv_array[i] = [round(float(self[i])/float(item),4)] if self.__isfloat(self[i]) else [float('NaN')]
+            truediv_array.insert(0,[self.columns[0]])
+            return dataFrame(truediv_array)
+        
+        #When item is a dataFrame
+        #Note that column name of the returned dataframe is the column name of first operand
+        elif type(item) == type(dataFrame([[''],['']])):
+            assert self.shape == item.shape , "No of rows mismatched"
+            for i in range(self.num_rows):
+                truediv_array[i] = [round(float(self[i])/float(item[i]),4)] if (self.__isfloat(self[i]) and self.__isfloat(item[i])) else [float('NaN')]
+            truediv_array.insert(0,[self.columns[0]])
+            return dataFrame(truediv_array)
+        
+        else:
+            assert False,"item should be float convertible datatype or a dataFrame of same shape"
+            
+                
+    def __add__(self, item):
+        '''Implementing '+' operator for dataFrame'''
+        
+        assert self.shape[1] == 1,"Cannot call + on more than one column"
+        add_array = [['']]*self.num_rows
+        
+        #Simple broadcasting
+        if  self.__isfloat(item):
+            for i in range(self.num_rows):
+                add_array[i] = [round(float(self[i])+float(item),4)] if self.__isfloat(self[i]) else [float('NaN')]
+            add_array.insert(0,[self.columns[0]])
+            return dataFrame(add_array)
+        
+        #When item is a dataFrame
+        elif type(item) == type(dataFrame([[''],['']])):
+            assert self.shape == item.shape , "No of rows mismatched"
+            for i in range(self.num_rows):
+                add_array[i] = [round(float(self[i])+float(item[i]),4)] if (self.__isfloat(self[i]) and self.__isfloat(item[i])) else [float('NaN')]
+            add_array.insert(0,[self.columns[0]])
+            return dataFrame(add_array)
+            
+        else:
+            assert False,"item should be convertible datatype or a dataFrame of same shape"
+                
+    def __sub__(self, item):
+        '''Implementing '-' operator for dataFrame'''
+        
+        assert self.shape[1] == 1,"Cannot call - on more than one column"
+        sub_array = [['']]*self.num_rows
+        
+        #Simple broadcasting
+        if  self.__isfloat(item):
+            for i in range(self.num_rows):
+                sub_array[i] = [round(float(self[i])-float(item),4)] if self.__isfloat(self[i]) else [float('NaN')]
+            sub_array.insert(0,[self.columns[0]])
+            return dataFrame(sub_array)
+        
+        #When item is a dataFrame
+        #Note that column name of the returned dataframe is the column name of first operand
+        elif type(item) == type(dataFrame([[''],['']])):
+            assert self.shape == item.shape , "No of rows mismatched"
+            for i in range(self.num_rows):
+                sub_array[i] = [round(float(self[i])-float(item[i]),4)] if (self.__isfloat(self[i]) and self.__isfloat(item[i])) else [float('NaN')]
+            sub_array.insert(0,[self.columns[0]])
+            return dataFrame(sub_array)
+        
+
+        
+        else:
+            assert False,"item should be float convertible datatype or a dataFrame of same shape"
+                
+    def __pow__(self, item):
+        '''Implementing '**' operator for dataFrame'''
+        
+        assert self.shape[1] == 1,"Cannot call - on more than one column"
+        pow_array = [['']]*self.num_rows
+        
+        #Simple broadcasting
+        if  self.__isfloat(item):
+            for i in range(self.num_rows):
+                pow_array[i] = [round(float(self[i])**float(item),4)] if self.__isfloat(self[i]) else [float('NaN')]
+            pow_array.insert(0,[self.columns[0]])
+            return dataFrame(pow_array)
+        
+        #When item is a dataFrame
+        #Note that column name of the returned dataframe is the column name of first operand
+        elif type(item) == type(dataFrame([[''],['']])):
+            assert self.shape == item.shape , "No of rows mismatched"
+            for i in range(self.num_rows):
+                pow_array[i] = [round(float(self[i])**float(item[i]),4)] if (self.__isfloat(self[i]) and self.__isfloat(item[i])) else [float('NaN')]
+            pow_array.insert(0,[self.columns[0]])
+            return dataFrame(pow_array)
+        
+
+        
+        else:
+            assert False,"item should be float convertible datatype or a dataFrame of same shape"
+            
             
             
     def __find_columns(self,column_name):
@@ -288,7 +455,16 @@ class dataFrame:
         for elem in dic:
             print('{0:<{1}} : {2}'.format(elem,max_length,dic[elem]))
         print('\n')        
-        
+    
+    
+    def __isfloat(self,x):
+        try:
+            float(x)
+            return True
+        except ValueError:
+            return False
+        except TypeError:
+            return False
         
     #Bi-type
     def __find_first_index_ofTwo(self,value):
@@ -321,6 +497,7 @@ class dataFrame:
         else:
             assert False, "Element Not Found"
 
+    
         
     def change_columnName(self,name):
         if isinstance(name,list):
@@ -344,6 +521,20 @@ class dataFrame:
                 item2counts[str(column)] = 1
         item2counts_ordered = OrderedDict(sorted(item2counts.items(), key = lambda x:-x[1]))
         self.__display_dict(item2counts_ordered)
+        
+    def diff(self):
+        assert self.shape[1] == 1,"Cannot call value_counts on more than one column"
+        
+        diff_array = [['']]*self.num_rows
+        for i in range(self.num_rows):
+            if (i-1 >=0) and self.__isfloat(self.__getitem__(i)) and self.__isfloat(self.__getitem__(i-1)):
+                diff_array[i] = [round(float(self.__getitem__(i))-float(self.__getitem__(i-1)),4)]
+            else:
+                diff_array[i] = ['NaN']
+        diff_array.insert(0,[self.columns[0]])
+        return dataFrame(diff_array)
+    
+  
         
     def find_firstOfTwo(self, value):
         '''Finds the first index of given value'''

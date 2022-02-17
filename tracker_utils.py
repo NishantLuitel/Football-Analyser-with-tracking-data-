@@ -31,11 +31,9 @@ def read_tracking_data(dataFolder, gameId , team, to_metric = False):
         filename_track = '/Sample_Game_{0}/Sample_Game_{0}_RawTrackingData_{1}_Team.csv'.format(str(gameId),team)
     else:
         assert False, "team can be either 'Home' or 'Away'"
-     
-    #tracking_data_df is the dataFrame object without the column name changed
-    #to '{jersey no}_x' and '{jersey no}_y' for position coordinates of players and ball
+        
     tracking_data_dF =  dataFrame(dataFolder + filename_track)
-    jerseys = get_player_jersey_from_raw_tracking(tracking_data_dF)
+    jerseys = get_player_jersey_from_tracking(tracking_data_dF)
     
     new_column_head = [tracking_data_dF[1].aslist[0], tracking_data_dF[1].aslist[1], tracking_data_dF[1].aslist[2]]
     for jersey in jerseys:
@@ -63,45 +61,19 @@ def read_event_data(dataFolder , gameId):
     return events_data
 
 
-def get_player_jersey_from_raw_tracking(tracking_data_dF):
+def get_player_jersey_from_tracking(tracking_data_dF):
     '''returns a list of jersey numbers of players involved in the given team'''
     
     jerseys = tracking_data_dF[0].aslist
     jerseys = [int(item) for item in jerseys if item != '']
     return jerseys
-
-    
-def get_player_jersey_from_tracking(tracking_data):
-    '''returns a list of jersey numbers of players involved in the given team'''
-    
-    jerseys = tracking_data.columns
-    jerseys = [int(item.strip('_x')) for item in jerseys if item.endswith('_x') and item.lower()!='ball_x']
-    return jerseys
-
     
     
-def get_goal_keeper_from_tracking(tracking_data,from_metric = True):
+def get_goal_keeper_from_tracking(tracking_data_dF):
     '''returns the jersey number of goal keeper'''
     
     
-    x_coordinates = tracking_data[0].aslist[3::2]
     
-    #remove all the 'NaN' elements in the data
-    while 'NaN' in x_coordinates:x_coordinates.remove('NaN')
-    
-    max_x = max(x_coordinates,key = float)
-    min_x = min(x_coordinates,key = float)
-    
-    if from_metric:      
-        goalKeeper_x = min_x if abs(float(min_x))>abs(float(max_x)) else max_x
-
-    else:
-        goalKeeper_x = min_x if abs(float(min_x)-0.5)>abs(float(max_x)-0.5) else max_x
-        
-    
-    column_index = tracking_data[0].aslist.index(goalKeeper_x) 
-    jersey_no = tracking_data.columns[column_index].rstrip('_x')
-    return int(jersey_no)
     
     
     

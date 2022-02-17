@@ -224,10 +224,8 @@ def calculate_velocity(tracking,jersey_no,smoothing = False,window_size = 5,max_
     
     speed = (vx**2 + vy**2)**(0.5) 
     speed.change_columnName([str(jersey_no) + "_speed"])
-    if speed>max_speed != False:
-        vx[speed>max_speed] = float('NaN')
-    if speed>max_speed != False:
-        vy[speed>max_speed] = float('NaN')
+    vx[speed>max_speed] = float('NaN')
+    vx[speed>max_speed] = float('NaN')
 
     
     if smoothing == True:
@@ -299,4 +297,6 @@ def __check_player_in_startingEleven(tracking,jersey_no):
     else:
         return True
     
+    
+
     

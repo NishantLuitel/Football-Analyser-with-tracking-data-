@@ -1,27 +1,34 @@
 class player:
     
     def __init__(self,x=0,y=0,num=0):
-        self.x=x
-        self.y=y
-        self.num =num
-        self.edges=set()
+        self._x=x
+        self._y=y
+        self._num =num
+        # self._edges=set()
     
-    def getdetail(self):
-        print("the player is {}".format(self.num))
+    def get_x(self):
+        return self.x
+    
+    def get_y(self):
+        return self.y
+    def get_player(self):
+        return self 
+    def __str__(self):
+        return "x = "+self._x+" y = "+self._y+" num = "+self._num
+    # def add_edge(self,edges):
+    #     self._edges.add(edges)
+    
         
-    def addplayer(self,x=0,y=0,num=0):
-        self.x=x
-        self.y=y
-        self.num=num
+    
         
-    def get_edges(self):
-        return self.edges
+    # def get_edges(self):
+    #     return self._edges
 
     def get_num(self):
-        return self.num
+        return self._num
     
-    def remove_edge(self,edge):
-        if edge in self.edges:
-            self.edges.remove(edge)
-        else:
-            raise ValueError("error")
+    # def remove_edge(self,edge):
+    #     if edge in self._edges:
+    #         self._edges.remove(edge)
+    #     else:
+    #         raise ValueError("error")

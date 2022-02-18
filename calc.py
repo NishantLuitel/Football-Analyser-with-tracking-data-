@@ -1,15 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sun Feb  6 19:59:07 2022
 
-@author: acer
+This module consists of all the calculations required for this project
+
 """
 
 import numpy as np
 #This module consists of all the calculations required for the project
-
-
-
 
     
 def eventsCount(events,jersey_no,Type):
@@ -34,28 +31,52 @@ def Sub_eventsCount(events,jersey_no,Type):
         return len(eventType_index)
     else:
         return 0
- 
+
+    
 def shots(events,jersey_no):
     '''Calulates the number of shots taken by player with 
     given jersey number in the given events data structure'''
     
-    return eventsCount(events,jersey_no,Type = 'Shots')
-    
+    return eventsCount(events,jersey_no,Type = 'Shot')
 
     
+def goals(events,jersey_no):
+    '''Calulates the number of goals scored by player with 
+    given jersey number in the given events data structure'''
+    
+    #first find all the subtypes strings that ends in -GOAL
+    string = 'Player'+str(jersey_no)
+    subtype_strings = list(set(events[events['From'] == string]['Subtype'].aslist))
+    goal_strings = [goal_string for goal_string in subtype_strings if goal_string.endswith('-GOAL')]
+    num_goals = 0
+    
+    #Sum over all the type of goals
+    for goal_string in goal_strings:
+        num_goals+=Sub_eventsCount(events,jersey_no,Type=goal_string)
+    
+    return num_goals
+
+
+def completed_crosses(events,jersey_no):
+    '''Calulates the number of completed crosses by player with 
+    given jersey number in the given events data structure'''
+    
+    #Only crosses during pass are considered(no setpiece crosses and corner kick crosses) 
+    return Sub_eventsCount(events,jersey_no,Type = 'Cross')
+    
+ 
+   
 def passes_completed(events,jersey_no):
     '''Calulates the number of passes completed by player with 
     given jersey number in the given events data structure'''
     
     return eventsCount(events,jersey_no,Type = 'Pass')
     
-    
-    
+        
 def passes_attempted(events,jersey_no):
     '''Calulates the number of passes attemted by player with 
     given jersey number in the given events data structure'''
-    
-    #add the completed pass and the balls lost except by theft, clearances and shots 
+     
     completed_passes = passes_completed(events,jersey_no)
     balls_lost = eventsCount(events,jersey_no,Type = 'Ball Lost')   
     balls_lostByTheft = Sub_eventsCount(events,jersey_no,Type = 'Theft') 
@@ -67,6 +88,73 @@ def passes_attempted(events,jersey_no):
             balls_lostByClearance - balls_lostByHeadClearance -balls_lostByWoodwork)
 
 
+def tackles_won(events,jersey_no):
+    '''Calulates the number of tackles won by player with 
+    given jersey number in the given events data structure'''
+    
+    return Sub_eventsCount(events,jersey_no,Type = 'TACKLE-WON')
+
+
+def tackles_lost(events,jersey_no):
+    '''Calulates the number of tackles lost by player with 
+    given jersey number in the given events data structure'''
+    
+    return Sub_eventsCount(events,jersey_no,Type = 'TACKLE-LOST')
+
+
+def aerial_duals_won(events,jersey_no):
+    '''Calulates the number of aerial duals won by player with 
+    given jersey number in the given events data structure'''
+    
+    return Sub_eventsCount(events,jersey_no,Type = 'AERIAL-WON')
+
+
+def aerial_duals_lost(events,jersey_no):
+    '''Calulates the number of aerial duals lost by player with 
+    given jersey number in the given events data structure'''
+    
+    return Sub_eventsCount(events,jersey_no,Type = 'AERIAL-LOST')
+
+
+def fouls_recieved(events,jersey_no):
+    '''Calulates the number of aerial duals lost by player with 
+    given jersey number in the given events data structure'''
+    
+    return eventsCount(events,jersey_no,Type = 'FAULT RECIEVED')
+
+
+def challenges_won(events,jersey_no):
+    '''Calulates the number of challenges won by player with 
+    given jersey number in the given events data structure'''
+    
+    string = 'Player'+str(jersey_no)
+    subtype_strings = list(set(events[events['From'] == string]['Subtype'].aslist))
+    challenge_won_strings = [challenge_won_string for challenge_won_string in subtype_strings if challenge_won_string.endswith('-WON')]
+    num_challenges_won = 0
+    
+    #Sum over all the type of won challenges
+    for challenge_won_string in challenge_won_strings:
+        num_challenges_won+=Sub_eventsCount(events,jersey_no,Type=challenge_won_string)
+    
+    return num_challenges_won
+
+
+def challenges_lost(events,jersey_no):
+    '''Calulates the number of challenges lost by player with 
+    given jersey number in the given events data structure'''
+    
+    string = 'Player'+str(jersey_no)
+    subtype_strings = list(set(events[events['From'] == string]['Subtype'].aslist))
+    challenge_lost_strings = [challenge_lost_string for challenge_lost_string in subtype_strings if challenge_lost_string.endswith('-LOST')]
+    num_challenges_lost = 0
+    
+    #Sum over all the type of lost challenges
+    for challenge_lost_string in challenge_lost_strings:
+        num_challenges_lost+=Sub_eventsCount(events,jersey_no,Type=challenge_lost_string)
+    
+    return num_challenges_lost
+
+    
 def interceptions(events,jersey_no):
     '''Calulates the number of interceptions made by player with 
     given jersey number in the given events data structure'''
@@ -101,15 +189,18 @@ def minutes_played(tracking,jersey_no):
         #Takes longer time to execute
         return round(float(len(tracking[player_str] != 'NaN'))/25/60,2)
 
-    
-
-    
-
 
 def distance_covered(tracking,jersey_no):
     '''Calculates the distace covered (in kilometers) by given jersey number'''
     
-    pass
+    speed = calculate_velocity(tracking,jersey_no)
+    dt = tracking['Time [s]'].diff().aslist[1] 
+    #distance covered is speed multiplied time and summed over
+    #divide by 1000 to convert into kilometers
+    distance = round((speed.sum()*dt)/1000,4)
+    
+    return distance
+
 
 def calculate_velocity(tracking,jersey_no,smoothing = False,window_size = 5,max_speed = 12.0 ,save_to_tracking=False):
     '''Calulates velocity for player of given jersey_no. (in m/sec)
@@ -152,22 +243,51 @@ def calculate_velocity(tracking,jersey_no,smoothing = False,window_size = 5,max_
         tracking[str(jersey_no) + "_speed"] = speed.aslist
     
     return speed
+
     
 def max_speed(tracking,jersey_no):
     '''Returns the maximum speed (in kilometers/hour) reached by player of given jersey number'''
     
-    speed = calculate_velocity(tracking,jersey_no,smoothing = True)
+    #dt here is 0.04 seconds
+    dt = tracking['Time [s]'].diff().aslist[1]
+        
+    #Maximum speed is the maximum of the average speed for each second for the player
+    #That is why the window size is taken as 25 so that 0.04sec * 25 = 1sec 
+    speed = calculate_velocity(tracking,jersey_no,window_size = int(1/dt) ,smoothing = True)
     
     #because 1st value is a nan we max only elements after that
-    return max(speed.aslist[1:])*3.60
-    
-    
+    return max(speed.aslist[25:])*3.60
     
 
+def sprints(tracking,jersey_no):
+    '''Returns the number of sprints made by player
+        Note: Sprints occur when a player moves with speed greater than 7m/s for at least a second'''
+        
+    speed = calculate_velocity(tracking,jersey_no,smoothing = True)
+    sprint_threshold = 7.0
+    dt = tracking['Time [s]'].diff().aslist[1]
+    sprint_window = int(1/dt)
+    window = [1]*sprint_window
+    
+    #Creating a list with 1 where speed is greater than sprint threshold and 0 where less than sprint threshold
+    sprint_threshold_index = (speed > sprint_threshold)
+    sprint_bools = [0]*speed.num_rows
+    for i in sprint_threshold_index : sprint_bools[i] = 1
+        
+    #
+    temp_list = np.convolve(sprint_bools,window,mode = 'same')
+    player_sprints = [0]*speed.num_rows
+    for i in range(len(player_sprints)): player_sprints[i] = (1 if (temp_list[i] >= sprint_window) else 0)
+    diff_player_sprints = [player_sprints[i+1]-player_sprints[i] for i in range(len(player_sprints)-1) if(player_sprints[i+1] - player_sprints[i])>0]
+    
+    return sum(diff_player_sprints)
+
+    
 def __check_player_in_tracking(tracking,jersey_no):
     
     player_str = str(jersey_no)+'_x'
     assert player_str in tracking.columns , "Player " + str(jersey_no) + " not present in the team"
+    
     
 def __check_player_in_startingEleven(tracking,jersey_no):
     
@@ -177,5 +297,4 @@ def __check_player_in_startingEleven(tracking,jersey_no):
     else:
         return True
     
-
     

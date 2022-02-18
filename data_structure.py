@@ -7,6 +7,7 @@ Created on Sun Jan 30 19:56:46 2022
 import csv
 import os.path
 from collections import OrderedDict
+import math
 
 
 class dataFrame:
@@ -523,7 +524,7 @@ class dataFrame:
         self.__display_dict(item2counts_ordered)
         
     def diff(self):
-        assert self.shape[1] == 1,"Cannot call value_counts on more than one column"
+        assert self.shape[1] == 1,"Cannot call diff on more than one column"
         
         diff_array = [['']]*self.num_rows
         for i in range(self.num_rows):
@@ -534,8 +535,18 @@ class dataFrame:
         diff_array.insert(0,[self.columns[0]])
         return dataFrame(diff_array)
     
-  
+    def sum(self,ignore_nons = True):
+        '''Calculates the sum of elements of the column'''
         
+        assert self.shape[1] == 1,"Cannot call diff on more than one column"
+        if ignore_nons:
+            sum_array = [float(self[i]) for i in range(self.num_rows) if (not math.isnan(self[i]) and self[i] not in ['NaN'] and self.__isfloat(self[i]))]
+        else:
+            return round(float(sum(self.aslist)),4)
+
+        return round(float(sum(sum_array)),4)
+  
+    
     def find_firstOfTwo(self, value):
         '''Finds the first index of given value'''
         

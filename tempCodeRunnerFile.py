@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
  DISPLAYSURF = pygame.display.set_mode((400, 300))
 
 #  pygame.display.set_caption('Hello World!')
@@ -51,3 +52,20 @@
 # e2.addedge(p1,p3,33)
 # e2.display()
 >>>>>>> ec33264... sagar
+=======
+ DISPLAYSURF = pygame.display.set_mode((400, 300))
+
+#  pygame.display.set_caption('Hello World!')
+
+#  while True: # main game loop
+
+#       for event in pygame.event.get():
+
+#           if event.type == QUIT:
+
+#              pygame.quit()
+
+#              sys.exit()
+
+#      pygame.display.update()
+>>>>>>> 1839e1b... rati vo

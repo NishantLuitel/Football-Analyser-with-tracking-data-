@@ -1,5 +1,8 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> 1839e1b38119c9449251837d0643494c7de422e1
  DISPLAYSURF = pygame.display.set_mode((400, 300))
 
 #  pygame.display.set_caption('Hello World!')
@@ -14,6 +17,7 @@
 
 #              sys.exit()
 
+<<<<<<< HEAD
 #      pygame.display.update()
 =======
      #reading data from the file for each player 
@@ -69,3 +73,6 @@
 
 #      pygame.display.update()
 >>>>>>> 1839e1b... rati vo
+=======
+#      pygame.display.update()
+>>>>>>> 1839e1b38119c9449251837d0643494c7de422e1

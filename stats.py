@@ -10,7 +10,7 @@ import tracker_utils
 from calc import goals, shots,distance_covered,passes_completed,passes_attempted,sprints,recoveries,interceptions,minutes_played,max_speed,challenges_won,challenges_lost,aerial_duals_lost,aerial_duals_won,fouls_recieved,completed_crosses,tackles_won,tackles_lost
 
 dataFolder = 'data'
-gameId = 1
+gameId = 2
 
 
 events,tracking_home,tracking_away = tracker_utils.read_game_data(dataFolder, gameId,to_metric = True)
@@ -59,10 +59,10 @@ print('Crosses completed by player',jersey_no,'is: ',completed_crosses(events_ho
 print('Ball Recoveries made by player',jersey_no,'is: ',recoveries(events_home,jersey_no))
 print('Interceptions made by player',jersey_no,'is: ',interceptions(events_home,jersey_no))
 print('Minutes played by player',   jersey_no,'is: ',minutes_played(tracking_home,jersey_no) )
-print('Maximum speed(in kilometers/sec) reached by player',jersey_no,'is: ',round(max_speed(tracking_home,jersey_no),2))
-print('Distance covered(in kilometers) by player',jersey_no,'is: ',round(distance_covered(tracking_home,jersey_no),2))
-print('Sprints made by player',jersey_no,'is: ',sprints(tracking_home,jersey_no))
-print('goals scored by player',jersey_no,'is: ',goals(events_home,jersey_no))
+# print('Maximum speed(in kilometers/sec) reached by player',jersey_no,'is: ',round(max_speed(tracking_home,jersey_no),2))
+# print('Distance covered(in kilometers) by player',jersey_no,'is: ',round(distance_covered(tracking_home,jersey_no),2))
+# print('Sprints made by player',jersey_no,'is: ',sprints(tracking_home,jersey_no))
+# print('goals scored by player',jersey_no,'is: ',goals(events_home,jersey_no))
 
 
 

@@ -1,9 +1,10 @@
- # -*- coding: utf-8 -*-
 """
-Created on Sun Jan 30 19:56:46 2022
+This module consists of custom dataFrame definition used for this project
 
-@author: acer
+This definition is constructed to somehow mimic pandas DataFrame
+
 """
+
 import csv
 import os.path
 from collections import OrderedDict
@@ -270,6 +271,29 @@ class dataFrame:
                 return False
             else:
                 return indexes
+
+    def __le__(self,item):
+        '''Implementing '>=' for dataFrame '''
+        
+        # When the equality check is done with a dataFrame object
+        #if type(item)==type(dataFrame([[''],['']])):
+        #    if self.shape == item.shape:
+        #        return self.__rows == item.__rows
+        #    else:
+        #        return False
+            
+        # When the equality check is done with a item present in the column dataFrame 
+        #else:
+        assert self.shape[1] == 1 , "Cannot check equality on more than one column"
+        indexes = [i for i,element in enumerate(self.aslist) if int(element) <= item]
+            
+            #Returns False if no item is matched or list of index if some items are matched
+        if len(indexes) == 0:
+            return False
+        else:
+            return indexes
+            
+            
     def __gt__(self,item):
         '''Implementing '==' for dataFrame '''
         
@@ -538,13 +562,27 @@ class dataFrame:
     def sum(self,ignore_nons = True):
         '''Calculates the sum of elements of the column'''
         
-        assert self.shape[1] == 1,"Cannot call diff on more than one column"
+        assert self.shape[1] == 1,"Cannot call sum on more than one column"
         if ignore_nons:
             sum_array = [float(self[i]) for i in range(self.num_rows) if (not math.isnan(self[i]) and self[i] not in ['NaN'] and self.__isfloat(self[i]))]
         else:
             return round(float(sum(self.aslist)),4)
 
         return round(float(sum(sum_array)),4)
+
+
+    def num_items(self,ignore_nons = True):
+        '''Calculates the sum of elements of the column'''
+        
+        assert self.shape[1] == 1,"Cannot call sum on more than one column"
+        if ignore_nons:
+            array = [float(self[i]) for i in range(self.num_rows) if (not math.isnan(self[i]) and self[i] not in ['NaN'] and self.__isfloat(self[i]))]
+        else:
+            return len(self.num_rows)
+
+        return len(array)
+    
+    
   
     
     def find_firstOfTwo(self, value):

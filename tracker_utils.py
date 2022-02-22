@@ -1,8 +1,6 @@
-# -*- coding: utf-8 -*-
 """
-Created on Sun Jan 30 19:59:32 2022
+This module contains all the utility functions for working with tracking data with dataFrame
 
-@author: acer
 """
 
 
@@ -64,7 +62,7 @@ def read_event_data(dataFolder , gameId):
 
 
 def get_player_jersey_from_raw_tracking(tracking_data_dF):
-    '''returns a list of jersey numbers of players involved in the given team'''
+    '''returns a list of jersey numbers of players involved in the given team for raw tracking data'''
     
     jerseys = tracking_data_dF[0].aslist
     jerseys = [int(item) for item in jerseys if item != '']

@@ -1,12 +1,12 @@
-# -*- coding: utf-8 -*-
+
 """
 
-This module consists of all the calculations required for this project
+This module consists of all the calculations required for Summarizing statatistics of players
 
 """
 
 import numpy as np
-#This module consists of all the calculations required for the project
+from tracker_utils import get_player_jersey_from_tracking
 
     
 def eventsCount(events,jersey_no,Type):
@@ -77,6 +77,8 @@ def passes_attempted(events,jersey_no):
     '''Calulates the number of passes attemted by player with 
     given jersey number in the given events data structure'''
      
+    
+    #Calculate pass attempted by removing some of the ball losses from completed passes
     completed_passes = passes_completed(events,jersey_no)
     balls_lost = eventsCount(events,jersey_no,Type = 'Ball Lost')   
     balls_lostByTheft = Sub_eventsCount(events,jersey_no,Type = 'Theft') 
@@ -207,14 +209,14 @@ def calculate_velocity(tracking,jersey_no,smoothing = False,window_size = 5,max_
     
         Convolution is done of given window size if smoothing is set to True'''
         
-    assert max_speed>0, "speed should only have magnitude"   
+    assert max_speed>0, "speed should only have magnitude" 
+    
+    #Player strings in the tracking data
     player_str_x = str(jersey_no)+'_x'
     player_str_y = str(jersey_no)+'_y'
-    
-    
+       
     first_half_idx = (tracking['Period'] == '1')
     second_half_idx = (tracking['Period'] == '2')
-    #second_half_idx = tracking['Period'].find_last_validOfTwo('2')
     dt = tracking['Time [s]'].diff().aslist[1]
     
     #Calculate velocity in x and y direction
@@ -228,8 +230,8 @@ def calculate_velocity(tracking,jersey_no,smoothing = False,window_size = 5,max_
         vx[speed>max_speed] = float('NaN')
     if speed>max_speed != False:
         vy[speed>max_speed] = float('NaN')
-
     
+    #Smoothing is done by calculating moving average for the given window 
     if smoothing == True:
         window = [1/window_size]*window_size
         vx[first_half_idx] = list(np.convolve(vx[first_half_idx].aslist , window ,'same'))
@@ -239,6 +241,8 @@ def calculate_velocity(tracking,jersey_no,smoothing = False,window_size = 5,max_
         vy[second_half_idx] = list(np.convolve(vy[second_half_idx].aslist , window ,'same'))
 
     speed = (vx**2 + vy**2)**(0.5) 
+    
+    #Save the velocity and speed columns in the given tracking data
     if save_to_tracking == True:
         tracking[str(jersey_no) + "_vx"] = vx.aslist
         tracking[str(jersey_no) + "_vy"] = vy.aslist
@@ -246,6 +250,37 @@ def calculate_velocity(tracking,jersey_no,smoothing = False,window_size = 5,max_
     
     return speed
 
+    
+def calculate_at_once(tracking,jersey_no):
+    
+    '''Calculates maximum speed, distance and number of sprints from 1 time speed calculation'''
+    
+    
+    dt = tracking['Time [s]'].diff().aslist[1]
+    speed = calculate_velocity(tracking,jersey_no,window_size = int(1/dt) ,smoothing = True)
+    
+    #maximum speed and distance
+    max_speed = max(speed.aslist[25:])*3.60
+    distance = round((speed.sum()*dt)/1000,4)    
+    
+    sprint_threshold = 7.0
+    dt = tracking['Time [s]'].diff().aslist[1]
+    sprint_window = int(1/dt)
+    window = [1]*sprint_window
+    
+    #Creating a list with 1 where speed is greater than sprint threshold and 0 where less than sprint threshold
+    sprint_threshold_index = (speed > sprint_threshold)
+    sprint_bools = [0]*speed.num_rows
+    for i in sprint_threshold_index : sprint_bools[i] = 1
+    temp_list = np.convolve(sprint_bools,window,mode = 'same')
+    player_sprints = [0]*speed.num_rows
+    for i in range(len(player_sprints)): player_sprints[i] = (1 if (temp_list[i] >= sprint_window) else 0)
+    diff_player_sprints = [player_sprints[i+1]-player_sprints[i] for i in range(len(player_sprints)-1) if(player_sprints[i+1] - player_sprints[i])>0]
+    
+    sprints = sum(diff_player_sprints)
+    
+    return (max_speed,distance,sprints)
+    
     
 def max_speed(tracking,jersey_no):
     '''Returns the maximum speed (in kilometers/hour) reached by player of given jersey number'''
@@ -264,7 +299,7 @@ def max_speed(tracking,jersey_no):
 def sprints(tracking,jersey_no):
     '''Returns the number of sprints made by player
         Note: Sprints occur when a player moves with speed greater than 7m/s for at least a second'''
-        
+    
     speed = calculate_velocity(tracking,jersey_no,smoothing = True)
     sprint_threshold = 7.0
     dt = tracking['Time [s]'].diff().aslist[1]
@@ -276,7 +311,7 @@ def sprints(tracking,jersey_no):
     sprint_bools = [0]*speed.num_rows
     for i in sprint_threshold_index : sprint_bools[i] = 1
         
-    #
+    #Convolution is done to find whether the speed lasts at least a second
     temp_list = np.convolve(sprint_bools,window,mode = 'same')
     player_sprints = [0]*speed.num_rows
     for i in range(len(player_sprints)): player_sprints[i] = (1 if (temp_list[i] >= sprint_window) else 0)
@@ -284,7 +319,35 @@ def sprints(tracking,jersey_no):
     
     return sum(diff_player_sprints)
 
+
+def avg_position(tracking_data):
+    '''
+       Returns a dictionary with avg coordinate of players
+       
+       The Key should be given in format '{jersey_no}_x' or '{jersey_no}_y to access the avg coordinate'  
+       example use: avg = avg_position(tracking_home)
+                    player_11_avg_x = avg['11_x']
+                    print(player_11_avg_x)
+       
+    '''
+    avg_dict = {}
+    jerseys = get_player_jersey_from_tracking(tracking_data)
     
+    for jersey in jerseys:
+        string_x = str(jersey) + '_x'
+        string_y = str(jersey) + '_y'
+        
+        avg_x = tracking_data[string_x].sum() / tracking_data[string_x].num_items()
+        avg_y = tracking_data[string_y].sum() / tracking_data[string_y].num_items()
+        
+        avg_dict[string_x] = float(avg_x)
+        avg_dict[string_y] = float(avg_y)      
+    
+    return avg_dict
+    
+    
+    
+
 def __check_player_in_tracking(tracking,jersey_no):
     
     player_str = str(jersey_no)+'_x'

@@ -1,28 +1,27 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Mon Jan 31 21:51:43 2022
+#   Learn to analyze tracking and events data
 
-@author: acer
-"""
+ 
 
-#   Learn to analyze tracking data
+#Custom dataFrame
 
-
-data_structure.py consists of a mannually built dataframe class and is suppossed to work like pandas dataFrame object 
-
-
-Use m[row_number] returns dataframe with correspoing row as a reference
-Use m[column_name] returns dataframe with correspoing column but by 
-
-m[row_number][column_name] is writable
-m[column_name][row_number] isn't writable
+data_structure.py consists of our custom dataFrame that mimics to some extent the DataFrame of Pandas library
+We have used this custom dataFrame instead of the popular libraries like Pandas and Numpy throughout this project.
 
 
 
+#Modules to run
 
-This project can be slightly modified to animate pitch control for any event
+1. Run stats.py for individual stats for the given team
+2. Run graph.py for graph visualization of passess between players
+3. Run goal_animation.py for creating simple goal animations
+4. Run pc_animation.py for creating goal animations integrated with pitch control
 
 
+
+Note : This project can be slightly modified to animate pitch control for any event
+
+
+#Coordinate system of sample data has been changed from Metrica sports coordinate to our metric system 
 
     #   Y                                                  Y
     #   |                                                  | 
@@ -39,11 +38,9 @@ This project can be slightly modified to animate pitch control for any event
     #
     #    Metrica sports coordinate                                Our metric system
     #    --------------------------                               ----------------------               
-    
-    
-    
-    
-    //File directory Required
+
+        
+#File directory Required for this project
     
 │
 ├── animations\
@@ -60,40 +57,20 @@ This project can be slightly modified to animate pitch control for any event
 │   │   ├── to_metric\
 │   │   │   │
 │   │   │   ├── with_speed\
-│   │   │   │   ├── Sample_Game_1_RawTrackingData_Away_Team.csv
-│   │   │   │   └── Sample_Game_1_RawTrackingData_Home_Team.csv
-│   │   │   │
-│   │   │   ├── Sample_Game_1_RawTrackingData_Away_Team.csv
-│   │   │   └── Sample_Game_1_RawTrackingData_Home_Team.csv
 │   │   │
 │   │   ├── Sample_Game_1_RawEventsData.csv
 │   │   ├── Sample_Game_1_RawTrackingData_Away_Team.csv
 │   │   └── Sample_Game_1_RawTrackingData_Home_Team.csv
 │   │
 │   ├── Sample_Game_2\
-│   │   │
-│   │   ├── to_metric\
-│   │   │   │
-│   │   │   ├── with_speed\
-│   │   │   │   ├── Sample_Game_2_RawTrackingData_Away_Team.csv
-│   │   │   │   └── Sample_Game_2_RawTrackingData_Home_Team.csv
-│   │   │   │
-│   │   │   ├── Sample_Game_2_RawTrackingData_Away_Team.csv
-│   │   │   └── Sample_Game_2_RawTrackingData_Home_Team.csv
-│   │   │
-│   │   ├── Sample_Game_2_RawEventsData.csv
-│   │   ├── Sample_Game_2_RawTrackingData_Away_Team.csv
-│   │   └── Sample_Game_2_RawTrackingData_Home_Team.csv
-│   │
-│   ├── Sample_Game_3\
-│   │   │
-│   │   ├── to_metric\
-│   │   │
-│   │   ├── Sample_Game_3_events.json
-│   │   ├── Sample_Game_3_metadata.xml
-│   │   └── Sample_Game_3_tracking.txt
-│   │
-│   └── EPV_grid.csv
+│       │
+│       ├── to_metric\
+│       │   │
+│       │   ├── with_speed\
+│       │
+│       ├── Sample_Game_2_RawEventsData.csv
+│       ├── Sample_Game_2_RawTrackingData_Away_Team.csv
+│       └── Sample_Game_2_RawTrackingData_Home_Team.csv
 │
 ├── README.md
 ├── calc.py
@@ -104,6 +81,8 @@ This project can be slightly modified to animate pitch control for any event
 ├── practice.py
 ├── stats.py
 ├── tracker_utils.py
+└── graph.py
+└── visualize.py
 └── visualize.py
     
     

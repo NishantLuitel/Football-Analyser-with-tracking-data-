@@ -80,3 +80,9 @@ for events in (events_home,events_away):
             save_match_clip(tracking_home[goal_index_list],tracking_away[goal_index_list],fname=filename,include_player_velocities=True,annotate = True)            
     i+=1
 
+##Demo
+#i = 0
+#frames = goal_indexes(events)
+#frame = frames[i]
+#goal_index_list = list(range(start_frame,end_frame))
+#save_match_clip(tracking_home[goal_index_list],tracking_away[goal_index_list],fname='Demo',include_player_velocities=True,annotate = True)

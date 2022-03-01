@@ -564,7 +564,7 @@ class dataFrame:
         
         assert self.shape[1] == 1,"Cannot call sum on more than one column"
         if ignore_nons:
-            sum_array = [float(self[i]) for i in range(self.num_rows) if (not math.isnan(self[i]) and self[i] not in ['NaN'] and self.__isfloat(self[i]))]
+            sum_array = [float(self[i]) for i in range(self.num_rows) if (not math.isnan(float(self[i])) and self[i] not in ['NaN'] and self.__isfloat(self[i]))]
         else:
             return round(float(sum(self.aslist)),4)
 
@@ -576,7 +576,7 @@ class dataFrame:
         
         assert self.shape[1] == 1,"Cannot call sum on more than one column"
         if ignore_nons:
-            array = [float(self[i]) for i in range(self.num_rows) if (not math.isnan(self[i]) and self[i] not in ['NaN'] and self.__isfloat(self[i]))]
+            array = [float(self[i]) for i in range(self.num_rows) if (not math.isnan(float(self[i])) and self[i] not in ['NaN'] and self.__isfloat(self[i]))]
         else:
             return len(self.num_rows)
 

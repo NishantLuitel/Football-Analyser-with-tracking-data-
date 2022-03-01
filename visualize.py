@@ -127,7 +127,7 @@ def plot_frame( hometeam, awayteam, figax=None, team_colors=('b','r'), field_dim
     ax.plot( float(hometeam['Ball_x']), float(hometeam['Ball_y']), 'ko', markersize=6, alpha=1.0, linewidth=0)
     return fig,ax
 
-    
+  
 def save_match_clip(hometeam,awayteam, fpath = 'animations/raw_goals', fname='clip_test', figax=None ,frames_per_second=25, team_colors=('b','r'), field_dimen = (105.0,68.0), include_player_velocities=False,annotate = False, PlayerMarkerSize=10, PlayerAlpha=0.7):
     '''
     

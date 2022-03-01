@@ -71,7 +71,59 @@ def passes_completed(events,jersey_no):
     given jersey number in the given events data structure'''
     
     return eventsCount(events,jersey_no,Type = 'Pass')
+
     
+def passes(jersey1,jersey2,events):
+    '''Calulates the number of passes completed by player with 
+    given jersey1  to the player with jersey2 in the given events data structure'''
+    
+    string1 = 'Player'+str(jersey1)
+    string2 = 'Player'+str(jersey2)
+    eventType_index = events[events['From'] == string1]['To'] == string2
+    if eventType_index != False:
+        return len(eventType_index)
+    else:
+        return 0
+ 
+def generate_passes_table(tracking_data,events_data):
+    '''Creates a two dimensional list of passes from player to player'''
+    
+    
+    jerseys = get_player_jersey_from_tracking(tracking_data)
+    jerseys_start_11 = [x for x in jerseys if __check_player_in_startingEleven(tracking_data,x)]
+    #jersey_start_string = ['Player' + str(x) for x in jerseys_start_11]
+    passes_table = []
+    #list(np.zeros(shape=(12,12)))
+    #for p in passes_table:
+    #    p = list(p)
+    
+    
+    for (i,From) in enumerate(jerseys_start_11):
+        passes_table.append([0]*11)
+        for (j,To) in enumerate(jerseys_start_11):
+            if From!=To:
+                passes_table[i][j] = passes(From,To,events_data) 
+    return passes_table
+
+
+def generate_avg_xy(tracking_data):
+    '''Creates average x and y for every player'''
+    
+    avg = avg_position(tracking_data)
+    
+    jerseys = get_player_jersey_from_tracking(tracking_data)
+    jerseys_start_11 = [x for x in jerseys if __check_player_in_startingEleven(tracking_data,x)]
+        
+    avg_list = []
+    for (i,jersey) in  enumerate(jerseys_start_11):
+        avg_list.append([])
+        avg_list[i].append(avg[str(jersey)+str('_x')])
+        avg_list[i].append(avg[str(jersey)+str('_y')])
+        avg_list[i].append(jersey)
+        
+    return avg_list
+
+
         
 def passes_attempted(events,jersey_no):
     '''Calulates the number of passes attemted by player with 
@@ -119,7 +171,7 @@ def aerial_duals_lost(events,jersey_no):
 
 
 def fouls_recieved(events,jersey_no):
-    '''Calulates the number of aerial duals lost by player with 
+    '''Calulates the number of fouls received by player with 
     given jersey number in the given events data structure'''
     
     return eventsCount(events,jersey_no,Type = 'FAULT RECIEVED')
@@ -320,7 +372,7 @@ def sprints(tracking,jersey_no):
     return sum(diff_player_sprints)
 
 
-def avg_position(tracking_data):
+def avg_position(tracking_data,half = 1):
     '''
        Returns a dictionary with avg coordinate of players
        
@@ -337,14 +389,18 @@ def avg_position(tracking_data):
         string_x = str(jersey) + '_x'
         string_y = str(jersey) + '_y'
         
-        avg_x = tracking_data[string_x].sum() / tracking_data[string_x].num_items()
-        avg_y = tracking_data[string_y].sum() / tracking_data[string_y].num_items()
+        num_x = tracking_data[tracking_data['Period'] == str(half)][string_x].num_items() or 1
+        num_y = tracking_data[tracking_data['Period'] == str(half)][string_y].num_items() or 1
+        avg_x = tracking_data[tracking_data['Period'] == str(half)][string_x].sum() / num_x
+        avg_y = tracking_data[tracking_data['Period'] == str(half)][string_y].sum() / num_y
         
         avg_dict[string_x] = float(avg_x)
         avg_dict[string_y] = float(avg_y)      
     
     return avg_dict
     
+
+
     
     
 

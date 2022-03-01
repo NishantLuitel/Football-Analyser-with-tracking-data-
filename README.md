@@ -39,3 +39,71 @@ This project can be slightly modified to animate pitch control for any event
     #
     #    Metrica sports coordinate                                Our metric system
     #    --------------------------                               ----------------------               
+    
+    
+    
+    
+    //File directory Required
+    
+│
+├── animations\
+│   │
+│   ├── pitch_control\
+│   │
+│   └── raw_goals\
+│
+│
+├── data\
+│   │
+│   ├── Sample_Game_1\
+│   │   │
+│   │   ├── to_metric\
+│   │   │   │
+│   │   │   ├── with_speed\
+│   │   │   │   ├── Sample_Game_1_RawTrackingData_Away_Team.csv
+│   │   │   │   └── Sample_Game_1_RawTrackingData_Home_Team.csv
+│   │   │   │
+│   │   │   ├── Sample_Game_1_RawTrackingData_Away_Team.csv
+│   │   │   └── Sample_Game_1_RawTrackingData_Home_Team.csv
+│   │   │
+│   │   ├── Sample_Game_1_RawEventsData.csv
+│   │   ├── Sample_Game_1_RawTrackingData_Away_Team.csv
+│   │   └── Sample_Game_1_RawTrackingData_Home_Team.csv
+│   │
+│   ├── Sample_Game_2\
+│   │   │
+│   │   ├── to_metric\
+│   │   │   │
+│   │   │   ├── with_speed\
+│   │   │   │   ├── Sample_Game_2_RawTrackingData_Away_Team.csv
+│   │   │   │   └── Sample_Game_2_RawTrackingData_Home_Team.csv
+│   │   │   │
+│   │   │   ├── Sample_Game_2_RawTrackingData_Away_Team.csv
+│   │   │   └── Sample_Game_2_RawTrackingData_Home_Team.csv
+│   │   │
+│   │   ├── Sample_Game_2_RawEventsData.csv
+│   │   ├── Sample_Game_2_RawTrackingData_Away_Team.csv
+│   │   └── Sample_Game_2_RawTrackingData_Home_Team.csv
+│   │
+│   ├── Sample_Game_3\
+│   │   │
+│   │   ├── to_metric\
+│   │   │
+│   │   ├── Sample_Game_3_events.json
+│   │   ├── Sample_Game_3_metadata.xml
+│   │   └── Sample_Game_3_tracking.txt
+│   │
+│   └── EPV_grid.csv
+│
+├── README.md
+├── calc.py
+├── data_structure.py
+├── goal_animation.py
+├── pc_animation.py
+├── pitch_control.py
+├── practice.py
+├── stats.py
+├── tracker_utils.py
+└── visualize.py
+    
+    

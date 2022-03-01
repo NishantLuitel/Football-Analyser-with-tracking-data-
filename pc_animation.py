@@ -84,5 +84,10 @@ for events in (events_home,events_away):
     i+=1
 
 
-
+##Demo
+#i = 0
+#frames = goal_indexes(events)
+#frame = frames[i]
+#goal_index_list = list(range(start_frame,end_frame))
+#save_pitch_control_clip(events = events ,hometeam = tracking_home[goal_index_list] ,awayteam = tracking_away[goal_index_list],fname = 'Demo',GKnumbers = GKnumbers,params = params, include_player_velocities=True,annotate=True)
 

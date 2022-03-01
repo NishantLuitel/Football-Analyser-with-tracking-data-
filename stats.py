@@ -29,23 +29,23 @@ events_away = events[events['Team'] == 'Away']
 
 
 
-#table = generate_passes_table(tracking_away,events_away)
-#data_frame_table = data_structure.dataFrame(table)
-#data_structure.dataFrame.save_as_csv(data_frame_table,'passes_away.csv')
+table = generate_passes_table(tracking_away,events_away)
+data_frame_table = data_structure.dataFrame(table)
+data_structure.dataFrame.save_as_csv(data_frame_table,'passes_away.csv')
 
 
-#table2 = generate_avg_xy(tracking_away)
-#data_frame_table2 = data_structure.dataFrame(table2)
-#data_structure.dataFrame.save_as_csv(data_frame_table2,'avg1_away.csv')
+table2 = generate_avg_xy(tracking_away)
+data_frame_table2 = data_structure.dataFrame(table2)
+data_structure.dataFrame.save_as_csv(data_frame_table2,'avg1_away.csv')
 
-#table = generate_passes_table(tracking_home,events_home)
-#data_frame_table = data_structure.dataFrame(table)
-#data_structure.dataFrame.save_as_csv(data_frame_table,'passes_away.csv')
+table = generate_passes_table(tracking_home,events_home)
+data_frame_table = data_structure.dataFrame(table)
+data_structure.dataFrame.save_as_csv(data_frame_table,'passes_away.csv')
 
 
-#table2 = generate_avg_xy(tracking_home)
-#data_frame_table2 = data_structure.dataFrame(table2)
-#data_structure.dataFrame.save_as_csv(data_frame_table2,'avg1_home.csv')
+table2 = generate_avg_xy(tracking_home)
+data_frame_table2 = data_structure.dataFrame(table2)
+data_structure.dataFrame.save_as_csv(data_frame_table2,'avg1_home.csv')
 
 
 

@@ -1,17 +1,55 @@
-# -*- coding: utf-8 -*-
 """
-Created on Wed Feb  9 14:03:51 2022
 
-@author: hp
+This module produces graph of players with number of passes between them
+
 """
 import csv
 import numpy as np
-import visualize
+#import visualize
 import matplotlib.pyplot as plt
 from Player import player
-import matplotlib.colors as mcolors
+#import matplotlib.colors as mcolors
 from Edge import edge
 import data_structure
+from calc import generate_passes_table,generate_avg_xy
+import tracker_utils
+
+
+dataFolder = 'data'
+gameId = 1
+
+events,tracking_home,tracking_away = tracker_utils.read_game_data(dataFolder,gameId,to_metric = True)
+
+
+
+
+events_home = events[events['Team'] == 'Home']
+events_away = events[events['Team'] == 'Away']
+
+
+
+
+
+
+
+table = generate_passes_table(tracking_away,events_away)
+data_frame_table = data_structure.dataFrame(table)
+data_structure.dataFrame.save_as_csv(data_frame_table,'passes_away.csv')
+
+
+table2 = generate_avg_xy(tracking_away)
+data_frame_table2 = data_structure.dataFrame(table2)
+data_structure.dataFrame.save_as_csv(data_frame_table2,'avg1_away.csv')
+
+table = generate_passes_table(tracking_home,events_home)
+data_frame_table = data_structure.dataFrame(table)
+data_structure.dataFrame.save_as_csv(data_frame_table,'passes_home.csv')
+
+
+table2 = generate_avg_xy(tracking_home)
+data_frame_table2 = data_structure.dataFrame(table2)
+data_structure.dataFrame.save_as_csv(data_frame_table2,'avg1_home.csv')
+
         
 class graph():
     
